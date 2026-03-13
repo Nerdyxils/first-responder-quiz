@@ -77,7 +77,36 @@
   .total-card { background: linear-gradient(135deg, rgba(67,97,238,0.15), rgba(244,162,97,0.1)); border: 1px solid rgba(67,97,238,0.3); border-radius: 20px; padding: 28px 24px; width: 100%; }
   .restart-btn { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 15px 40px; border-radius: 100px; cursor: pointer; transition: border-color 0.15s; }
   .restart-btn:hover { border-color: var(--accent); }
-  @media (max-width: 520px) { .q-card { padding: 24px 20px 20px; } .q-text { font-size: 16px; } .results-grid { grid-template-columns: 1fr; } }
+  /* Mode selection */
+  .section-cards { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 720px; }
+  .mode-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 26px 24px; flex: 1; min-width: 240px; max-width: 340px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; text-align: left; }
+  .mode-tag { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; border: 1px solid; }
+  .mode-tag.tag-a { color: var(--accent); background: rgba(67,97,238,0.1); border-color: rgba(67,97,238,0.25); }
+  .mode-tag.tag-b { color: var(--accent2); background: rgba(244,162,97,0.1); border-color: rgba(244,162,97,0.25); }
+  .mode-card-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
+  .mode-card-count { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  .btn-mode { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.5px; color: #fff; border: none; padding: 13px 20px; border-radius: 100px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; width: 100%; }
+  .btn-mode.blue { background: var(--accent); box-shadow: 0 6px 24px rgba(67,97,238,0.35); }
+  .btn-mode.blue:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(67,97,238,0.5); }
+  .btn-mode.orange { background: var(--accent2); box-shadow: 0 6px 24px rgba(244,162,97,0.3); }
+  .btn-mode.orange:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(244,162,97,0.45); }
+  .btn-topics-toggle { background: none; border: none; color: var(--muted); font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; cursor: pointer; padding: 2px 0; }
+  .btn-topics-toggle:hover { color: var(--accent2); }
+  .topics-panel { width: 100%; max-width: 720px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 22px 24px; }
+  .topics-panel-header { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+  .topics-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .topic-btn { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; padding: 9px 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: border-color 0.15s, background 0.15s; }
+  .topic-btn:hover { border-color: var(--accent2); background: rgba(244,162,97,0.07); }
+  .topic-name { font-size: 13px; color: var(--text); }
+  .topic-count { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: var(--muted); background: var(--bg); padding: 2px 7px; border-radius: 100px; border: 1px solid var(--border); }
+  .divider-row { display: flex; align-items: center; gap: 14px; width: 100%; max-width: 720px; }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .btn-secondary { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 14px 36px; border-radius: 100px; cursor: pointer; transition: border-color 0.15s; }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .results-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .single-result { width: 100%; max-width: 380px; }
+  @media (max-width: 520px) { .q-card { padding: 24px 20px 20px; } .q-text { font-size: 16px; } .results-grid { grid-template-columns: 1fr; } .mode-card { min-width: 100%; } }
 </style>
 </head>
 <body>
@@ -85,12 +114,35 @@
 <div id="splash">
   <div class="badge">Canadian Red Cross</div>
   <h1>First Responder<br><span>Exam Prep</span></h1>
-  <p>Comprehensive coverage across all chapters. Instant feedback with full explanations on every answer.</p>
-  <div class="sections-preview">
-    <div class="sec-card"><div class="num">50</div><div class="label">Section A — Past Exam Questions</div></div>
-    <div class="sec-card"><div class="num" id="totalBCount">—</div><div class="label">Section B — Practice Questions</div></div>
+  <p>Choose a section or topic to practice. Instant feedback with full explanations on every answer.</p>
+
+  <div class="section-cards">
+    <div class="mode-card">
+      <span class="mode-tag tag-a">Section A</span>
+      <div class="mode-card-title">Past Exam Questions</div>
+      <div class="mode-card-count">50 questions</div>
+      <button class="btn-mode blue" onclick="startSection('A')">Start Mock →</button>
+    </div>
+    <div class="mode-card">
+      <span class="mode-tag tag-b">Section B</span>
+      <div class="mode-card-title">Practice Questions</div>
+      <div class="mode-card-count"><span id="totalBCount">—</span> questions</div>
+      <button class="btn-mode orange" onclick="startSection('B')">Start All Topics →</button>
+      <button class="btn-topics-toggle" id="topicsToggleBtn" onclick="toggleTopics()">Browse by Topic ↓</button>
+    </div>
   </div>
-  <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+
+  <div id="topicsPanel" class="topics-panel" style="display:none">
+    <div class="topics-panel-header">Section B — Choose a Topic</div>
+    <div class="topics-grid" id="topicsGrid"></div>
+  </div>
+
+  <div class="divider-row">
+    <div class="divider-line"></div>
+    <span class="divider-text">or</span>
+    <div class="divider-line"></div>
+  </div>
+  <button class="btn-secondary" onclick="startSection('full')">Run Full Quiz (A + B) →</button>
 </div>
 
 <div id="quiz">
@@ -114,28 +166,12 @@
 </div>
 
 <div id="results">
-  <h2>Quiz Complete 🎉</h2>
-  <div class="results-grid">
-    <div class="result-card">
-      <div class="sec-title">Section A</div>
-      <div class="big-score" id="scoreA">—</div>
-      <div class="out-of">out of 50</div>
-      <div class="percent-pill" id="pillA"></div>
-    </div>
-    <div class="result-card">
-      <div class="sec-title">Section B</div>
-      <div class="big-score" id="scoreB">—</div>
-      <div class="out-of" id="outOfB">out of —</div>
-      <div class="percent-pill" id="pillB"></div>
-    </div>
+  <h2 id="resultsHeading">Quiz Complete! 🎉</h2>
+  <div id="resultsContent"></div>
+  <div class="results-actions">
+    <button class="start-btn" onclick="tryAgain()">↺ Try Again</button>
+    <button class="restart-btn" onclick="goHome()">← Choose Section</button>
   </div>
-  <div class="total-card">
-    <div class="sec-title" style="margin-bottom:8px;">Total Score</div>
-    <div class="big-score" id="scoreTotal">—</div>
-    <div class="out-of" id="outOfTotal">out of —</div>
-    <div class="percent-pill" id="pillTotal" style="margin-top:12px;"></div>
-  </div>
-  <button class="restart-btn" onclick="restart()">↺ Try Again</button>
 </div>
 
 <script>
@@ -361,113 +397,208 @@ const Q = [
   {s:'B',c:'Acute & Chronic Illnesses',sc:"The diabetic patient does not improve in 10 minutes after receiving sugar.",q:"If the patient does not improve in 10 minutes, you should:",o:["Give him more water","Have him take more insulin","Place him in the rapid transport category","Suspect it is not a diabetic emergency"],a:2,e:"If a diabetic patient does not improve after giving sugar within 10 minutes, place him in the rapid transport category. Non-improvement may indicate a severe hypoglycemic episode requiring IV dextrose."}
 ];
 
-const totalB = Q.filter(q=>q.s==='B').length;
+// Normalise the two slightly-different chapter names so they group together
+Q.forEach(q => { if (q.c === 'Acute & Chronic Illness') q.c = 'Acute & Chronic Illnesses'; });
+
+const totalB = Q.filter(q => q.s === 'B').length;
 document.getElementById('totalBCount').textContent = totalB;
 
-let cur=0, sA=0, sB=0, done=false;
-const L=['A','B','C','D'];
+// Build topic buttons dynamically
+const TOPICS = [...new Set(Q.filter(q => q.s === 'B').map(q => q.c))];
+const topicsGrid = document.getElementById('topicsGrid');
+TOPICS.forEach(topic => {
+  const count = Q.filter(q => q.s === 'B' && q.c === topic).length;
+  const btn = document.createElement('button');
+  btn.className = 'topic-btn';
+  btn.innerHTML = `<span class="topic-name">${topic}</span><span class="topic-count">${count}q</span>`;
+  btn.onclick = () => startSection(topic);
+  topicsGrid.appendChild(btn);
+});
 
-function startQuiz(){
-  document.getElementById('splash').style.display='none';
-  document.getElementById('quiz').style.display='block';
+// ── State ──────────────────────────────────────────────────────────────
+let activeQ = [], cur = 0, score = 0, scoreA = 0, scoreB = 0, done = false, currentMode = null;
+const L = ['A','B','C','D'];
+
+// ── Splash helpers ─────────────────────────────────────────────────────
+function toggleTopics() {
+  const panel = document.getElementById('topicsPanel');
+  const btn   = document.getElementById('topicsToggleBtn');
+  const open  = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? 'Browse by Topic ↓' : 'Browse by Topic ↑';
+}
+
+// ── Start a mode ───────────────────────────────────────────────────────
+function startSection(mode) {
+  currentMode = mode;
+  cur = 0; score = 0; scoreA = 0; scoreB = 0; done = false;
+
+  if      (mode === 'A')    activeQ = Q.filter(q => q.s === 'A');
+  else if (mode === 'B')    activeQ = Q.filter(q => q.s === 'B');
+  else if (mode === 'full') activeQ = [...Q];
+  else                      activeQ = Q.filter(q => q.s === 'B' && q.c === mode);
+
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('quiz').style.display   = 'block';
   render();
 }
 
-function render(){
-  done=false;
-  const q=Q[cur];
-  document.getElementById('progressBar').style.width=((cur/Q.length)*100)+'%';
-  document.getElementById('qNum').textContent=`Q${cur+1} / ${Q.length}`;
-  document.getElementById('chapterTag').textContent=q.c;
-  document.getElementById('sectionLabel').textContent=`Section ${q.s} — ${q.s==='A'?'Past Exam Questions':'Practice Questions'}`;
-  document.getElementById('scoreLive').innerHTML=`Score: <span>${sA+sB}</span>`;
+// ── Render current question ────────────────────────────────────────────
+function render() {
+  done = false;
+  const q = activeQ[cur];
 
-  const sb=document.getElementById('scenarioBox');
-  sb.innerHTML=q.sc?`<div class="scenario-box"><strong>Scenario</strong>${q.sc}</div>`:'';
+  document.getElementById('progressBar').style.width = ((cur / activeQ.length) * 100) + '%';
+  document.getElementById('qNum').textContent = `Q${cur+1} / ${activeQ.length}`;
+  document.getElementById('chapterTag').textContent = q.c;
 
-  document.getElementById('qText').textContent=q.q;
+  let label;
+  if      (currentMode === 'full') label = `Section ${q.s} — ${q.s === 'A' ? 'Past Exam Questions' : 'Practice Questions'}`;
+  else if (currentMode === 'A')    label = 'Section A — Past Exam Questions';
+  else if (currentMode === 'B')    label = 'Section B — Practice Questions';
+  else                             label = currentMode;
+  document.getElementById('sectionLabel').textContent = label;
 
-  const opts=document.getElementById('options');
-  opts.innerHTML='';
-  q.o.forEach((o,i)=>{
-    const b=document.createElement('button');
-    b.className='opt';
-    b.innerHTML=`<span class="opt-letter">${L[i]}</span><span class="opt-text">${o}</span>`;
-    b.onclick=()=>pick(i,b);
+  const liveScore = currentMode === 'full' ? scoreA + scoreB : score;
+  document.getElementById('scoreLive').innerHTML = `Score: <span>${liveScore}</span>`;
+
+  const sb = document.getElementById('scenarioBox');
+  sb.innerHTML = q.sc ? `<div class="scenario-box"><strong>Scenario</strong>${q.sc}</div>` : '';
+
+  document.getElementById('qText').textContent = q.q;
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.o.forEach((o, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.innerHTML = `<span class="opt-letter">${L[i]}</span><span class="opt-text">${o}</span>`;
+    b.onclick = () => pick(i, b);
     opts.appendChild(b);
   });
 
-  document.getElementById('resultBanner').style.display='none';
-  document.getElementById('explanation').style.display='none';
-  document.getElementById('nextBtn').style.display='none';
+  document.getElementById('resultBanner').style.display = 'none';
+  document.getElementById('explanation').style.display  = 'none';
+  document.getElementById('nextBtn').style.display      = 'none';
 
-  const card=document.getElementById('qCard');
-  card.style.animation='none';
-  requestAnimationFrame(()=>card.style.animation='');
+  const card = document.getElementById('qCard');
+  card.style.animation = 'none';
+  requestAnimationFrame(() => card.style.animation = '');
 }
 
-function pick(chosen,btn){
-  if(done)return;
-  done=true;
-  const q=Q[cur];
-  document.querySelectorAll('.opt').forEach(o=>o.classList.add('disabled'));
+// ── Answer selection ───────────────────────────────────────────────────
+function pick(chosen, btn) {
+  if (done) return;
+  done = true;
+  const q = activeQ[cur];
+  document.querySelectorAll('.opt').forEach(o => o.classList.add('disabled'));
 
-  const banner=document.getElementById('resultBanner');
-  const exp=document.getElementById('explanation');
+  const banner = document.getElementById('resultBanner');
+  const exp    = document.getElementById('explanation');
 
-  if(chosen===q.a){
+  if (chosen === q.a) {
     btn.classList.add('correct');
-    banner.className='result-banner correct-banner';
-    banner.textContent='✓ Correct!';
-    if(q.s==='A')sA++;else sB++;
-  }else{
+    banner.className = 'result-banner correct-banner';
+    banner.textContent = '✓ Correct!';
+    if (currentMode === 'full') { if (q.s === 'A') scoreA++; else scoreB++; }
+    else score++;
+  } else {
     btn.classList.add('wrong');
     document.querySelectorAll('.opt')[q.a].classList.add('correct');
-    banner.className='result-banner wrong-banner';
-    banner.textContent=`✗ Incorrect — the correct answer is ${L[q.a]}`;
+    banner.className = 'result-banner wrong-banner';
+    banner.textContent = `✗ Incorrect — the correct answer is ${L[q.a]}`;
   }
-  banner.style.display='flex';
-  exp.innerHTML=`<strong>Explanation:</strong> ${q.e}`;
-  exp.style.display='block';
 
-  const nb=document.getElementById('nextBtn');
-  nb.style.display='inline-block';
-  nb.textContent=cur<Q.length-1?'Next Question →':'See Results →';
+  banner.style.display = 'flex';
+  exp.innerHTML = `<strong>Explanation:</strong> ${q.e}`;
+  exp.style.display = 'block';
 
-  document.getElementById('scoreLive').innerHTML=`Score: <span>${sA+sB}</span>`;
+  const nb = document.getElementById('nextBtn');
+  nb.style.display = 'inline-block';
+  nb.textContent = cur < activeQ.length - 1 ? 'Next Question →' : 'See Results →';
+
+  const liveScore = currentMode === 'full' ? scoreA + scoreB : score;
+  document.getElementById('scoreLive').innerHTML = `Score: <span>${liveScore}</span>`;
 }
 
-function nextQuestion(){
+function nextQuestion() {
   cur++;
-  if(cur>=Q.length)showResults();
+  if (cur >= activeQ.length) showResults();
   else render();
 }
 
-function showResults(){
-  document.getElementById('quiz').style.display='none';
-  const r=document.getElementById('results');
-  r.style.display='flex';
-  document.getElementById('scoreA').textContent=sA;
-  document.getElementById('scoreB').textContent=sB;
-  document.getElementById('scoreTotal').textContent=sA+sB;
-  document.getElementById('outOfB').textContent=`out of ${totalB}`;
-  document.getElementById('outOfTotal').textContent=`out of ${Q.length}`;
-  setPill('pillA',Math.round((sA/50)*100));
-  setPill('pillB',Math.round((sB/totalB)*100));
-  setPill('pillTotal',Math.round(((sA+sB)/Q.length)*100));
+// ── Results ────────────────────────────────────────────────────────────
+function pillClass(p) { return p >= 80 ? 'pass' : p >= 60 ? 'needs-work' : 'fail'; }
+
+function showResults() {
+  document.getElementById('quiz').style.display = 'none';
+  const r = document.getElementById('results');
+  r.style.display = 'flex';
+
+  let heading;
+  if      (currentMode === 'full') heading = 'Full Quiz Complete! 🎉';
+  else if (currentMode === 'A')    heading = 'Section A Complete! 🎉';
+  else if (currentMode === 'B')    heading = 'Section B Complete! 🎉';
+  else                             heading = `${currentMode} — Complete! 🎉`;
+  document.getElementById('resultsHeading').textContent = heading;
+
+  const content = document.getElementById('resultsContent');
+
+  if (currentMode === 'full') {
+    const pA = Math.round((scoreA / 50) * 100);
+    const pB = Math.round((scoreB / totalB) * 100);
+    const pT = Math.round(((scoreA + scoreB) / activeQ.length) * 100);
+    content.innerHTML = `
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="sec-title">Section A</div>
+          <div class="big-score">${scoreA}</div>
+          <div class="out-of">out of 50</div>
+          <div class="percent-pill ${pillClass(pA)}">${pA}%</div>
+        </div>
+        <div class="result-card">
+          <div class="sec-title">Section B</div>
+          <div class="big-score">${scoreB}</div>
+          <div class="out-of">out of ${totalB}</div>
+          <div class="percent-pill ${pillClass(pB)}">${pB}%</div>
+        </div>
+      </div>
+      <div class="total-card">
+        <div class="sec-title" style="margin-bottom:8px;">Total Score</div>
+        <div class="big-score">${scoreA + scoreB}</div>
+        <div class="out-of">out of ${activeQ.length}</div>
+        <div class="percent-pill ${pillClass(pT)}" style="margin-top:12px;">${pT}%</div>
+      </div>`;
+  } else {
+    const total = activeQ.length;
+    const p     = Math.round((score / total) * 100);
+    let title;
+    if      (currentMode === 'A') title = 'Section A — Past Exam Questions';
+    else if (currentMode === 'B') title = 'Section B — Practice Questions';
+    else                          title = currentMode;
+    content.innerHTML = `
+      <div class="result-card single-result">
+        <div class="sec-title">${title}</div>
+        <div class="big-score">${score}</div>
+        <div class="out-of">out of ${total}</div>
+        <div class="percent-pill ${pillClass(p)}">${p}%</div>
+      </div>`;
+  }
 }
 
-function setPill(id,p){
-  const el=document.getElementById(id);
-  el.textContent=p+'%';
-  el.className='percent-pill '+(p>=80?'pass':p>=60?'needs-work':'fail');
-}
-
-function restart(){
-  cur=0;sA=0;sB=0;
-  document.getElementById('results').style.display='none';
-  document.getElementById('quiz').style.display='block';
+// ── Post-results navigation ────────────────────────────────────────────
+function tryAgain() {
+  document.getElementById('results').style.display = 'none';
+  cur = 0; score = 0; scoreA = 0; scoreB = 0;
+  document.getElementById('quiz').style.display = 'block';
   render();
+}
+
+function goHome() {
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('topicsPanel').style.display = 'none';
+  document.getElementById('topicsToggleBtn').textContent = 'Browse by Topic ↓';
+  document.getElementById('splash').style.display = 'flex';
 }
 </script>
 </body>
