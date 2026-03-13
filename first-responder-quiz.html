@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Responder Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #E63946;
+    --green: #2DC653;
+    --bg: #0D0F14;
+    --surface: #161920;
+    --surface2: #1E2230;
+    --border: #2A2F3E;
+    --text: #EEF0F5;
+    --muted: #7A8099;
+    --accent: #4361EE;
+    --accent2: #F4A261;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ---- SPLASH ---- */
+  #splash {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 24px;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    background: rgba(244,162,97,0.1);
+    border: 1px solid rgba(244,162,97,0.25);
+    padding: 6px 14px;
+    border-radius: 100px;
+  }
+
+  #splash h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 7vw, 72px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+  }
+
+  #splash h1 span { color: var(--accent); }
+
+  #splash p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  .sections-preview {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .sec-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 28px;
+    text-align: center;
+    min-width: 160px;
+  }
+
+  .sec-card .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .sec-card .label {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .start-btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 18px 52px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 8px 32px rgba(67,97,238,0.35);
+    margin-top: 8px;
+  }
+
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(67,97,238,0.5); }
+
+  /* ---- QUIZ ---- */
+  #quiz { display: none; width: 100%; max-width: 780px; padding: 24px 20px 60px; }
+
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0 28px;
+    gap: 16px;
+  }
+
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+  }
+
+  .score-live {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .score-live span { color: var(--green); }
+
+  /* Progress */
+  .progress-wrap {
+    background: var(--surface2);
+    border-radius: 100px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 100px;
+    transition: width 0.4s ease;
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 36px 28px;
+    animation: fadeUp 0.35s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .q-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .q-text {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.55;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+
+  /* Options */
+  .options { display: flex; flex-direction: column; gap: 12px; }
+
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    text-align: left;
+  }
+
+  .opt:hover:not(.disabled) {
+    border-color: var(--accent);
+    background: rgba(67,97,238,0.08);
+    transform: translateX(4px);
+  }
+
+  .opt.disabled { cursor: default; }
+
+  .opt-letter {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--muted);
+    min-width: 22px;
+    padding-top: 1px;
+  }
+
+  .opt-text { font-size: 15px; line-height: 1.5; color: var(--text); }
+
+  .opt.correct {
+    border-color: var(--green);
+    background: rgba(45,198,83,0.1);
+  }
+
+  .opt.correct .opt-letter { color: var(--green); }
+
+  .opt.wrong {
+    border-color: var(--red);
+    background: rgba(230,57,70,0.1);
+  }
+
+  .opt.wrong .opt-letter { color: var(--red); }
+
+  /* Explanation */
+  .explanation {
+    margin-top: 20px;
+    background: rgba(67,97,238,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #c0c8e0;
+    animation: fadeIn 0.3s ease;
+    display: none;
+  }
+
+  .explanation strong { color: var(--accent2); }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .result-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 20px;
+    animation: fadeIn 0.3s ease;
+    display: none;
+  }
+
+  .result-banner.correct-banner { background: rgba(45,198,83,0.12); color: var(--green); border: 1px solid rgba(45,198,83,0.25); }
+  .result-banner.wrong-banner { background: rgba(230,57,70,0.1); color: var(--red); border: 1px solid rgba(230,57,70,0.2); }
+
+  .next-btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-top: 28px;
+    display: none;
+    transition: transform 0.15s;
+    box-shadow: 0 4px 20px rgba(67,97,238,0.3);
+  }
+
+  .next-btn:hover { transform: translateY(-2px); }
+
+  /* ---- RESULTS ---- */
+  #results {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 24px;
+    gap: 32px;
+    width: 100%;
+    max-width: 700px;
+  }
+
+  #results h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px 24px;
+  }
+
+  .result-card .sec-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .big-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .out-of {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .percent-pill {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 14px;
+    border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .pass { background: rgba(45,198,83,0.15); color: var(--green); }
+  .needs-work { background: rgba(244,162,97,0.15); color: var(--accent2); }
+  .fail { background: rgba(230,57,70,0.12); color: var(--red); }
+
+  .total-card {
+    background: linear-gradient(135deg, rgba(67,97,238,0.15), rgba(244,162,97,0.1));
+    border: 1px solid rgba(67,97,238,0.3);
+    border-radius: 20px;
+    padding: 28px 24px;
+    width: 100%;
+  }
+
+  .restart-btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 15px 40px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  .restart-btn:hover { border-color: var(--accent); }
+
+  @media (max-width: 520px) {
+    .q-card { padding: 24px 20px 20px; }
+    .q-text { font-size: 16px; }
+    .results-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="badge">Canadian Red Cross</div>
+  <h1>First Responder<br><span>Exam Prep</span></h1>
+  <p>80 questions across two sections. Instant feedback on every answer. Track your score as you go.</p>
+  <div class="sections-preview">
+    <div class="sec-card">
+      <div class="num">50</div>
+      <div class="label">Section A — Past Exam Questions</div>
+    </div>
+    <div class="sec-card">
+      <div class="num">30</div>
+      <div class="label">Section B — Practice Questions</div>
+    </div>
+  </div>
+  <button class="start-btn" onclick="startQuiz()">Start Quiz →</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz">
+  <div class="top-bar">
+    <div class="section-label" id="sectionLabel">Section A</div>
+    <div class="score-live" id="scoreLive">Score: <span>0</span></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar" style="width:0%"></div>
+  </div>
+  <div class="q-card" id="qCard">
+    <div class="q-meta">
+      <span class="q-num" id="qNum">Q1 / 80</span>
+    </div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="options"></div>
+    <div class="result-banner" id="resultBanner"></div>
+    <div class="explanation" id="explanation"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results">
+  <h2>Quiz Complete 🎉</h2>
+  <div class="results-grid">
+    <div class="result-card">
+      <div class="sec-title">Section A</div>
+      <div class="big-score" id="scoreA">—</div>
+      <div class="out-of">out of 50</div>
+      <div class="percent-pill" id="pillA"></div>
+    </div>
+    <div class="result-card">
+      <div class="sec-title">Section B</div>
+      <div class="big-score" id="scoreB">—</div>
+      <div class="out-of">out of 30</div>
+      <div class="percent-pill" id="pillB"></div>
+    </div>
+  </div>
+  <div class="total-card">
+    <div class="sec-title" style="margin-bottom:8px;">Total Score</div>
+    <div class="big-score" id="scoreTotal">—</div>
+    <div class="out-of">out of 80</div>
+    <div class="percent-pill" id="pillTotal" style="margin-top:12px;"></div>
+  </div>
+  <button class="restart-btn" onclick="restart()">↺ Try Again</button>
+</div>
+
+<script>
+const questions = [
+  // ===== SECTION A (Q1–Q50) =====
+  {
+    section: 'A',
+    q: "What common condition is most often associated with emphysema and chronic bronchitis?",
+    opts: ["Asthma","Cyanosis","Chronic obstructive pulmonary disease (COPD)","Flu"],
+    ans: 2,
+    exp: "COPD is the umbrella term that includes both emphysema (damaged air sacs) and chronic bronchitis (inflamed airways). They almost always occur together."
+  },
+  {
+    section: 'A',
+    q: "What are the Six Rights of Medication?",
+    opts: ["Right person, right medication, right dosage, right time, right route, right documentation","Right person, right medication, right dosage, right date, right route, right concentration","Right person, right condition, right dosage, right date, right route, right documentation","Right person, right concentration, right dosage, right date, right route, right documentation"],
+    ans: 0,
+    exp: "The Six Rights are: Person, Medication, Dosage, Time, Route, Documentation. Note 'Time' — not 'date' or 'concentration'."
+  },
+  {
+    section: 'A',
+    q: "What is the term for a mask combined with a reservoir bag used to administer high-concentration oxygen to a patient?",
+    opts: ["Bag-valve mask (BVM)","Non-rebreather mask","Nasal cannula","Resuscitation mask"],
+    ans: 1,
+    exp: "A non-rebreather mask has a one-way valve and reservoir bag that delivers up to 90%+ oxygen. A BVM is used for ventilation, not just oxygen delivery to a breathing patient."
+  },
+  {
+    section: 'A',
+    q: "Where would you apply a splint to effectively immobilize a mid-third fracture of the tibia/fibula?",
+    opts: ["Ankle and lower leg","Lower leg and knee","Ankle, lower leg, and knee","Foot, ankle, lower leg, and femur"],
+    ans: 2,
+    exp: "A splint must immobilize the joint above AND below the fracture. For a mid-shaft tibia/fibula fracture, you immobilize the ankle (below) and the knee (above)."
+  },
+  {
+    section: 'A',
+    q: "When is the triage process used?",
+    opts: ["When you have a patient with multiple injuries","Any time the patients outnumber the responders","When there is more than one patient at the scene","When the incident is large enough for the media to report on"],
+    ans: 1,
+    exp: "Triage is triggered whenever resources (responders) are overwhelmed by the number of patients — not just at large incidents."
+  },
+  {
+    section: 'A',
+    q: "What is the name for the condition caused by disease-producing micro-organisms, also called pathogens or germs, in the body?",
+    opts: ["Herpes","HIV","Bacteria","Infection"],
+    ans: 3,
+    exp: "An infection is what occurs when pathogens invade and multiply in body tissue. Bacteria and viruses are types of pathogens that CAUSE infection."
+  },
+  {
+    section: 'A',
+    q: "What information does the acronym SAMPLE refer to?",
+    opts: ["Signs and symptoms, allergies, medications, past medical history, last oral intake, and events before the incident","Signs and symptoms, activity before the incident, medications, past medical history, last similar incident, and events before the incident","Size of patient, acuteness of symptoms, meals, past medical history, last medication taken, and elevated temperature","Signs and symptoms, allergies, medications, past medical history, less concerning symptoms, and events before the incident"],
+    ans: 0,
+    exp: "SAMPLE = S-Signs/symptoms, A-Allergies, M-Medications, P-Past medical history, L-Last oral intake, E-Events before the incident."
+  },
+  {
+    section: 'A',
+    q: "What is the ratio of compressions to ventilations for two responders performing CPR on a child?",
+    opts: ["5 compressions for every 1 ventilation","15 compressions for every 1 ventilation","15 compressions for every 2 ventilations","30 compressions for every 2 ventilations"],
+    ans: 2,
+    exp: "Two-rescuer child CPR = 15:2. Two-rescuer adult CPR = 30:2. One-rescuer CPR (child or adult) = 30:2."
+  },
+  {
+    section: 'A',
+    q: "A young man has fallen to the ground from a tree the height of a two-storey house. The scene is safe. What is your first responsibility in caring for this patient?",
+    opts: ["Monitor vital signs","Perform head-tilt/chin-lift","Minimize movement of the head and spine","Control the bleeding from his forehead"],
+    ans: 2,
+    exp: "A fall from height is a significant MOI for spinal injury. Before anything else, you must protect the spine — manual spinal motion restriction (SMR) is your first hands-on priority."
+  },
+  {
+    section: 'A',
+    q: "A patient speaks inappropriate words, only opens eyes to verbal stimulus, and obeys your command to point to his watch. What is his Glasgow Coma Scale (GCS) score?",
+    opts: ["3","6","9","12"],
+    ans: 3,
+    exp: "GCS: Eyes = opens to voice = 3. Verbal = inappropriate words = 3. Motor = obeys commands = 6. Total = 3+3+6 = 12."
+  },
+  {
+    section: 'A',
+    q: "In which of the following situations would a fore-and-aft lift be an appropriate move to use?",
+    opts: ["The patient is unresponsive","The patient is significantly taller than the responder","The patient has suspected hip injuries","The patient is significantly heavier than the responder"],
+    ans: 0,
+    exp: "The fore-and-aft lift is used for unresponsive patients who need to be moved quickly. It is NOT used when spinal injury is suspected."
+  },
+  {
+    section: 'A',
+    q: "Which of the following signs or symptoms indicates a possible serious abdominal injury?",
+    opts: ["Tingling and numbness in the arms and legs","Respiratory distress","Impaired vision","Vomiting blood"],
+    ans: 3,
+    exp: "Vomiting blood (haematemesis) is a serious sign of internal abdominal bleeding or injury. The other options point to neurological or respiratory problems."
+  },
+  {
+    section: 'A',
+    q: "The first two stages of shock are compensated and decompensated shock. What is the third stage?",
+    opts: ["Progressing shock","Permeant shock","Irreversible shock","Fatal shock"],
+    ans: 2,
+    exp: "The three stages of shock are: (1) Compensated, (2) Decompensated, (3) Irreversible. In irreversible shock, organ damage is so severe that death will occur even with treatment."
+  },
+  {
+    section: 'A',
+    q: "Which of the following steps is NOT part of the emergency care for a responsive patient with a heat-related illness?",
+    opts: ["Having the patient take salt tablets orally","Cooling the patient","Lightly stretching and massaging any muscle cramps","Providing small amounts of water or a commercial sports drink"],
+    ans: 0,
+    exp: "Salt tablets are NOT recommended — they can worsen dehydration and cause nausea. Cooling, hydration with water/sports drinks, and gentle massage are all appropriate."
+  },
+  {
+    section: 'A',
+    q: "In which of the following situations would you move a patient before providing emergency care?",
+    opts: ["The patient is lying unconscious on the ground and a crowd of bystanders has gathered","The patient is sitting on a sailboat in open water complaining of chest pain","The patient is in a kayak with no pulse or breathing","The patient has collapsed unconscious in front of the ski lift and is blocking access"],
+    ans: 2,
+    exp: "You move a patient BEFORE care only when the scene is dangerous or when CPR cannot be performed in place. A kayak on water prevents effective CPR — move to solid ground immediately."
+  },
+  {
+    section: 'A',
+    q: "Which of the following is included in the Workplace Hazardous Materials Information System (WHMIS)?",
+    opts: ["Worker education and training programs","The provision of Material Safety Data Sheets (MSDSs)","Clearly labelled hazardous materials, including all toxic substances","All of the above"],
+    ans: 3,
+    exp: "WHMIS has three core components: worker education/training, labelling of hazardous materials, and Material Safety Data Sheets (MSDSs/SDS)."
+  },
+  {
+    section: 'A',
+    q: "What is the ratio of compressions to ventilations in two-responder CPR for an adult?",
+    opts: ["5 compressions for every 1 ventilation","15 compressions for every 1 ventilation","15 compressions for every 2 ventilations","30 compressions for every 2 ventilations"],
+    ans: 3,
+    exp: "Two-rescuer adult CPR = 30:2, same as single-rescuer adult. The 15:2 ratio only applies to two-rescuer child CPR."
+  },
+  {
+    section: 'A',
+    q: "What is the anatomical term for anything located toward the body's midline?",
+    opts: ["Posterior","Superior","Lateral","Medial"],
+    ans: 3,
+    exp: "Medial = toward the midline. Lateral = away from the midline. Example: the nose is medial to the ears."
+  },
+  {
+    section: 'A',
+    q: "Which of the following is considered to be a non-shockable rhythm?",
+    opts: ["Ventricular fibrillation","Ventricular tachycardia","Asystole","All of the above"],
+    ans: 2,
+    exp: "Asystole (flatline — no electrical activity) is non-shockable. VF and VT are shockable rhythms because a shock can interrupt and reset them. You cannot shock a heart with no electrical activity."
+  },
+  {
+    section: 'A',
+    q: "What is the most telling sign or symptom of a heart attack?",
+    opts: ["Profuse sweating","Pale skin","Persistent chest pain or discomfort","Difficulty breathing"],
+    ans: 2,
+    exp: "Persistent chest pain/pressure/discomfort is the hallmark sign of a heart attack (myocardial infarction). Other symptoms exist but chest pain is the most defining."
+  },
+  {
+    section: 'A',
+    q: "When performing two-responder CPR, how often should you switch which responder is performing compressions?",
+    opts: ["After every 2 minutes (5 cycles) of continuous CPR","After every 4 minutes (10 cycles) of continuous CPR","After every 30 compressions","Whenever the responder performing compressions becomes fatigued"],
+    ans: 0,
+    exp: "Rescuers switch every 2 minutes (every 5 cycles of 30:2) to maintain compression quality. Fatigued compressions become shallow and ineffective."
+  },
+  {
+    section: 'A',
+    q: "What does a nasal cannula do?",
+    opts: ["When combined with a reservoir bag, it administers high-concentration oxygen","It administers oxygen through the nostrils to a breathing patient","It reduces the delivery pressure of oxygen to a safe level","A and B"],
+    ans: 1,
+    exp: "A nasal cannula delivers low-flow oxygen (1-6 LPM) through two small prongs in the nostrils. It is only for patients who are breathing. The non-rebreather mask (with reservoir bag) gives high-concentration oxygen."
+  },
+  {
+    section: 'A',
+    q: "When using a nasal cannula, what should the flow rate be?",
+    opts: ["1 to 4 lpm","6 to 10 lpm","10 to 15 lpm","15 to 25 lpm"],
+    ans: 0,
+    exp: "Nasal cannula delivers oxygen at 1–4 litres per minute. Higher flow rates require a mask. Non-rebreather mask = 10-15 LPM. BVM with O2 = 15 LPM."
+  },
+  {
+    section: 'A',
+    q: "What is the definition of hyperglycemia?",
+    opts: ["A condition in which there is too much insulin in the body","A condition in which there is not enough insulin in the body","A condition in which a patient's blood glucose level (BGL) is too high","A condition in which a patient's blood glucose level (BGL) is too low"],
+    ans: 2,
+    exp: "Hyperglycemia = HIGH blood sugar. Hypoglycemia = LOW blood sugar. 'Hyper' = too much, 'Hypo' = too little. Memory trick: HyPo = low, HyPer = high."
+  },
+  {
+    section: 'A',
+    q: "The heart, blood, and blood vessels are major components of which body system?",
+    opts: ["Integumentary","Circulatory","Respiratory","Nervous"],
+    ans: 1,
+    exp: "The circulatory system consists of the heart, blood, and blood vessels (arteries, veins, capillaries). Its job is to transport oxygen, nutrients, and waste throughout the body."
+  },
+  {
+    section: 'A',
+    q: "What should you do when responding to a possible crime scene?",
+    opts: ["Document anything that you interact with or move","Gather and document any potential evidence you encounter","Confirm that the scene is a crime scene before requesting law enforcement personnel","Prevent law enforcement personnel from entering the scene until you have completed your primary assessment"],
+    ans: 0,
+    exp: "At a crime scene your job is patient care, but you must document anything you touch or move so police can accurately reconstruct the scene. Do NOT gather/disturb evidence."
+  },
+  {
+    section: 'A',
+    q: "In which situation would you remove an impaled object from a wound?",
+    opts: ["When direct pressure around an object in the forearm fails to stop the bleeding","When the object is impaled in the lower leg, making it impossible to apply a rigid splint to a fractured tibia","When an object impaled in a patient's cheek obstructs breathing","All of the above"],
+    ans: 2,
+    exp: "NEVER remove an impaled object EXCEPT when it is in the cheek and obstructing the airway. In all other cases, stabilize the object in place and transport."
+  },
+  {
+    section: 'A',
+    q: "You arrive at a scene of someone who inhaled a poison. The patient appears fully alert. Advanced medical care has already been summoned. What is your next priority management step?",
+    opts: ["Administer 100% oxygen and have the patient rest in a position of comfort","Treat the patient for shock and perform vital signs","Shower the patient with copious amounts of water","Have the patient move to a safe area with fresh air"],
+    ans: 3,
+    exp: "For inhaled poisons, the immediate priority is removing the patient from the toxic environment. Get them to fresh air. Advanced care is already coming, so your role is safe removal first."
+  },
+  {
+    section: 'A',
+    q: "What does personal protective equipment (PPE) include?",
+    opts: ["Soap or alcohol-based hand sanitizers","Containers for sharps","Disposable gloves, eye protection, and masks","Disinfectants such as bleach"],
+    ans: 2,
+    exp: "PPE refers to physical barriers worn on the body: gloves, eye protection (goggles/face shield), and masks. Hand sanitizers and disinfectants are infection control tools but not PPE."
+  },
+  {
+    section: 'A',
+    q: "What purpose(s) do bandages serve?",
+    opts: ["To provide a sterile covering for wounds and control bleeding","To apply pressure to control bleeding and hold dressings in place","To reduce pain in open wounds and provide support to injured body parts","To stop air from reaching a wound"],
+    ans: 1,
+    exp: "Bandages hold dressings in place and apply pressure. Dressings (not bandages) provide the sterile covering. Bandages are NOT inherently sterile."
+  },
+  {
+    section: 'A',
+    q: "What is the name for a hollow place in the body that contains organs?",
+    opts: ["Stomach","Bone","Body cavity","Quadrant"],
+    ans: 2,
+    exp: "Body cavities are hollow spaces that contain and protect organs. Examples: cranial cavity (brain), thoracic cavity (heart/lungs), abdominal cavity (digestive organs)."
+  },
+  {
+    section: 'A',
+    q: "After dressing and bandaging a forearm wound, the patient's fingers turn blue. What should you do?",
+    opts: ["Remove the bandage and apply a new one","Loosen the dressing","Loosen the bandage","Reposition the arm"],
+    ans: 2,
+    exp: "Blue fingers = circulation is being cut off by the bandage being too tight. Loosen the BANDAGE (outer layer applying pressure). The dressing (inner layer) stays in place."
+  },
+  {
+    section: 'A',
+    q: "What category does hemorrhagic shock fall into?",
+    opts: ["Cardiogenic shock","Hypovolemic shock","Obstructive shock","Psychogenic shock"],
+    ans: 1,
+    exp: "Hemorrhagic shock is caused by blood loss (hypovolemia = low fluid volume). Hypovolemic shock includes hemorrhagic shock and dehydration shock."
+  },
+  {
+    section: 'A',
+    q: "Emergency response depends on a reliable and efficient communication system. Which of the following is true about a communication system?",
+    opts: ["A backup communication system should be in place","Communications equipment should be checked often to ensure that it is working","It allows you to contact specialized or more advanced personnel as necessary","All of the above"],
+    ans: 3,
+    exp: "All three statements are true about reliable emergency communication systems. Backup systems, regular checks, and access to advanced personnel are all essential features."
+  },
+  {
+    section: 'A',
+    q: "What are the anatomical terms for anything located toward the front and back of the body?",
+    opts: ["Anterior, posterior","Lateral, medial","Proximal, distal","Inferior, superior"],
+    ans: 0,
+    exp: "Anterior = front of the body. Posterior = back of the body. These are directional terms assuming standard anatomical position."
+  },
+  {
+    section: 'A',
+    q: "What should you do immediately after cooling a thermal burn?",
+    opts: ["Remove any clothing that is sticking to the skin","Apply a commercial burn ointment, if available","Cover the burn with a sterile non-stick dressing, and bandage loosely","Place an occlusive dressing over the burn, and apply a bandage"],
+    ans: 2,
+    exp: "After cooling: cover with a sterile NON-STICK dressing and bandage loosely. Never remove clothing stuck to burns, never apply ointments, and never use occlusive dressings on burns."
+  },
+  {
+    section: 'A',
+    q: "Upon arriving at the scene of an assault, you find the patient on the ground while the assailant is still nearby holding a knife. What should you do?",
+    opts: ["Attempt to convince the assailant to let you care for the patient","Identify yourself and move slowly toward the patient, explaining what you want to do","Call for assistance from appropriate law enforcement personnel and stay back","Have a bystander call the police while you try to convince the assailant to drop the knife"],
+    ans: 2,
+    exp: "Scene safety FIRST. An armed assailant makes the scene unsafe. Do NOT approach. Call law enforcement and stage at a safe distance. Never put yourself at risk."
+  },
+  {
+    section: 'A',
+    q: "When can you stop care of a patient once care has begun?",
+    opts: ["When a responder with higher or equal training relieves you","When a family member tells you the patient is dead","When you are called to a more serious situation","When you are unsure of what to do"],
+    ans: 0,
+    exp: "You can only stop care when properly handing off to someone with EQUAL OR GREATER training. A family member's word, a more serious call, or uncertainty are NOT valid reasons to stop."
+  },
+  {
+    section: 'A',
+    q: "A young man has fallen from scaffolding at a construction site. What is your first responsibility in caring for this patient?",
+    opts: ["Monitoring vital signs","Performing head-tilt/chin-lift","Minimizing movement of the head and spine","Controlling the bleeding from his forehead"],
+    ans: 2,
+    exp: "A fall from scaffolding is a high-mechanism injury with significant risk of spinal injury. Manual spinal motion restriction (SMR) is your first hands-on priority."
+  },
+  {
+    section: 'A',
+    q: "How should you assess an ill or injured child?",
+    opts: ["Gain trust through your actions","Observe the child before touching him or her","Talk slowly and remain calm","All of the above"],
+    ans: 3,
+    exp: "Assessing children requires all three approaches: build trust, observe before touching, and stay calm. Children are highly sensitive to the responder's demeanor."
+  },
+  {
+    section: 'A',
+    q: "Eye contact, touching, posture, and gestures are examples of which of the following?",
+    opts: ["Physical assault","Active listening","Verbal communication","Non-verbal communication"],
+    ans: 3,
+    exp: "Non-verbal communication includes all body language: eye contact, touch, posture, gestures, and facial expressions. These often communicate more than words."
+  },
+  {
+    section: 'A',
+    q: "During assisted ventilations, which of the following would cause air to go into a patient's stomach?",
+    opts: ["Ventilating only until the chest rises","Making an inadequate seal","Failing to use supplemental oxygen","Ventilating too forcefully"],
+    ans: 3,
+    exp: "Ventilating too forcefully causes air to bypass the lungs and enter the stomach (gastric inflation), risking regurgitation and aspiration. Ventilate slowly and only until the chest rises."
+  },
+  {
+    section: 'A',
+    q: "What should you check while assessing a patient who has had a suspected cerebrovascular accident (CVA)?",
+    opts: ["Reaction time and speech patterns","Mechanism of injury (MOI) and onset time of signs and symptoms","Anxiety level and blood pressure","Facial droop, arm weakness, and speech abnormalities"],
+    ans: 3,
+    exp: "These are the classic signs of a stroke assessed using the FAST tool: Face (droop), Arms (weakness), Speech (abnormality), Time (call 911). CVA = stroke."
+  },
+  {
+    section: 'A',
+    q: "What must you do when deploying a piece of commercial equipment?",
+    opts: ["Follow the manufacturer's instructions","Use it for its intended purpose","Have proficiency in using the equipment","All of the above"],
+    ans: 3,
+    exp: "When using any commercial medical equipment you must: follow manufacturer instructions, use it for its intended purpose, and be proficient in its use. All three are required."
+  },
+  {
+    section: 'A',
+    q: "You are responding to the scene of a potential sexual assault. Which of the following guidelines should you follow?",
+    opts: ["Remove articles of clothing only if absolutely necessary to provide care for injuries","Have the patient interact with a responder of the same gender if possible","Treat the area as a crime scene","All of the above"],
+    ans: 3,
+    exp: "All three apply to sexual assault scenes: minimize clothing removal, same-gender responder if possible, and treat as a crime scene to preserve evidence."
+  },
+  {
+    section: 'A',
+    q: "Which of the following breathing devices would you use in caring for a patient who is breathing only 4 times per minute?",
+    opts: ["Nasal cannula","Non-rebreather mask","Bag-valve-mask resuscitator (BVM)","Standard oxygen mask"],
+    ans: 2,
+    exp: "4 breaths per minute is severely inadequate (normal is 12-20). This patient needs assisted ventilation — a BVM delivers positive pressure ventilations to support or replace breathing."
+  },
+  {
+    section: 'A',
+    q: "Which of the following is the most important reason for assessing the scene before approaching a patient?",
+    opts: ["You might become injured yourself if the scene is not safe","More advanced medical personnel will want to know the scene details","You have to know everything that happened in order to give care","Another responder might already be on scene helping the ill or injured patient"],
+    ans: 0,
+    exp: "Scene assessment is primarily about YOUR SAFETY. An injured responder becomes a second patient and cannot help anyone. Safety always comes first."
+  },
+  {
+    section: 'A',
+    q: "Which of the following mechanisms of injury (MOI) may indicate a head and/or spinal injury?",
+    opts: ["Any penetrating injury to the head, neck, or trunk","Any snowmobile incident where the patient is ejected from the vehicle","Any fall from a height greater than approximately one metre (three feet)","All of the above"],
+    ans: 3,
+    exp: "All three are significant MOIs for head/spinal injury. Any penetrating trauma, ejection from vehicles, and falls from height all indicate potential spinal involvement."
+  },
+  {
+    section: 'A',
+    q: "What is the purpose of the primary assessment?",
+    opts: ["To ensure there are no dangers at the scene","To determine the number of patients","To find all life-threatening injuries or conditions","To expose and treat all injuries"],
+    ans: 2,
+    exp: "The primary assessment focuses on finding and addressing life threats: airway, breathing, circulation, and level of responsiveness. Scene safety and patient count happen during scene size-up, BEFORE the primary assessment."
+  },
+  {
+    section: 'A',
+    q: "Which of the following indicates that birth is imminent?",
+    opts: ["The time between contractions is approximately 5 minutes","The baby's head is visible","The patient's amniotic sac has ruptured","The patient has been having contractions for more than 12 hours"],
+    ans: 1,
+    exp: "Crowning (baby's head is visible at the vaginal opening) indicates birth is imminent and delivery will happen very soon. The other options indicate labour is progressing but not necessarily that birth is seconds away."
+  },
+
+  // ===== SECTION B (Q51–Q80) =====
+  {
+    section: 'B',
+    q: "A patient is unconscious following a car accident. They cannot give permission for treatment. What type of consent allows you to treat them?",
+    opts: ["Expressed consent","Written consent","Implied consent","Informed consent"],
+    ans: 2,
+    exp: "When a patient is unconscious and cannot give expressed consent, implied consent assumes a reasonable person would want life-saving care. You may treat them."
+  },
+  {
+    section: 'B',
+    q: "Which of the following best describes 'abandonment'?",
+    opts: ["Refusing to respond to an emergency call","Stopping care without ensuring someone of equal or greater training continues","Failing to document patient care","Providing care without proper consent"],
+    ans: 1,
+    exp: "Once you start care, you are legally obligated to continue until a proper handoff. Abandonment is stopping without that handoff."
+  },
+  {
+    section: 'B',
+    q: "A patient refuses your care after you explain the risks of refusing. You should:",
+    opts: ["Treat them anyway since their life may be at risk","Call police to force them to accept treatment","Respect their decision, document the refusal, and try to get them to sign a refusal form","Leave without documenting anything"],
+    ans: 2,
+    exp: "Competent adults have the legal right to refuse care. Your job is to inform them of risks, document everything, and request they sign a refusal form."
+  },
+  {
+    section: 'B',
+    q: "What is the START triage system used for?",
+    opts: ["Assessing vital signs in a single critical patient","Quickly categorizing multiple patients by severity in a mass casualty incident","Determining whether a patient needs surgery","Estimating blood loss from a wound"],
+    ans: 1,
+    exp: "START = Simple Triage And Rapid Treatment. It is a rapid system (30 seconds per patient) used in MCIs to sort patients into: Minor (Green), Delayed (Yellow), Immediate (Red), Dead (Black)."
+  },
+  {
+    section: 'B',
+    q: "In the START system, a patient with a respiratory rate of 8 breaths per minute should be tagged:",
+    opts: ["Green (Minor)","Yellow (Delayed)","Red (Immediate)","Black (Dead/Non-salvageable)"],
+    ans: 2,
+    exp: "Normal respiratory rate is 12-20. Under 10 is critically low. In START, any breathing present + respiratory rate below 10 = Red (Immediate). Over 30 also = Red."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is the correct sequence for the START triage assessment?",
+    opts: ["Breathing → Circulation → Level of responsiveness","Level of responsiveness → Circulation → Breathing","Circulation → Breathing → Level of responsiveness","Breathing → Level of responsiveness → Circulation"],
+    ans: 0,
+    exp: "START follows: (1) Respiration/Breathing, (2) Circulation/Radial pulse, (3) Level of Responsiveness (LOR). This order is critical."
+  },
+  {
+    section: 'B',
+    q: "What does CBRNE stand for?",
+    opts: ["Chemical, Biological, Radiological, Nuclear, Explosive","Chemical, Bacterial, Radiological, Nuclear, Environmental","Combustion, Biological, Radiation, Neurological, Explosive","Chemical, Biological, Radiation, Nerve agent, Explosive"],
+    ans: 0,
+    exp: "CBRNE defines the categories of weapons/incidents that require specialized response teams and PPE."
+  },
+  {
+    section: 'B',
+    q: "What is the minimum safe distance from a downed electrical wire?",
+    opts: ["5 metres (15 feet)","10 metres (30 feet)","15 metres (50 feet)","30 metres (100 feet)"],
+    ans: 2,
+    exp: "You must stay at least 15 metres (50 feet) from a downed wire. Electrical current can arc through the ground outward from the wire."
+  },
+  {
+    section: 'B',
+    q: "Abruptio placentae refers to:",
+    opts: ["The placenta covering the cervix","The early separation of the placenta from the uterine wall","A baby being born feet first","The umbilical cord exiting before the baby"],
+    ans: 1,
+    exp: "Abruptio placentae = placenta detaches from the uterus BEFORE delivery. This causes serious bleeding and is life-threatening to both mother and baby."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is NOT a shockable cardiac rhythm?",
+    opts: ["Ventricular fibrillation (VF)","Ventricular tachycardia (VT)","Pulseless electrical activity (PEA)","Coarse VF"],
+    ans: 2,
+    exp: "PEA and Asystole are non-shockable. VF and pulseless VT are shockable because a defibrillation shock can reset them. PEA has organized electrical activity but no effective pump function."
+  },
+  {
+    section: 'B',
+    q: "Hyperglycemia in a diabetic patient may present with:",
+    opts: ["Sudden onset, cool/clammy skin, and shakiness","Gradual onset, increased thirst, frequent urination, and fruity breath","Sudden onset, seizures, and unconsciousness","Profuse sweating and rapid heart rate"],
+    ans: 1,
+    exp: "Hyperglycemia (high blood sugar) comes on gradually: 3 Ps — Polyuria (frequent urination), Polydipsia (increased thirst), Polyphagia (increased hunger). Fruity breath from ketones is a classic sign. Hypoglycemia = sudden, cold/clammy, shaky."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is true about the non-rebreather mask?",
+    opts: ["It delivers 30-40% oxygen","It is used to assist ventilation in non-breathing patients","It delivers up to 90% oxygen to a breathing patient","It requires a flow rate of 1-4 LPM"],
+    ans: 2,
+    exp: "The non-rebreather mask (with one-way valve and reservoir bag) delivers 60-90%+ oxygen at 10-15 LPM. It is for BREATHING patients only — not for ventilation."
+  },
+  {
+    section: 'B',
+    q: "What is the GCS (Glasgow Coma Scale) maximum and minimum score?",
+    opts: ["Max 15, Min 0","Max 15, Min 3","Max 12, Min 3","Max 15, Min 1"],
+    ans: 1,
+    exp: "GCS: Eyes (1-4) + Verbal (1-5) + Motor (1-6) = 3 to 15. A score of 3 means no response in any category. A score of 15 is fully alert and oriented."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is the correct way to manage a sucking chest wound?",
+    opts: ["Pack the wound with sterile gauze","Apply an occlusive dressing sealed on all four sides","Apply an occlusive dressing sealed on three sides","Leave the wound open to allow air to escape"],
+    ans: 2,
+    exp: "A three-sided occlusive seal allows air to escape during exhalation (preventing tension pneumothorax) but seals during inhalation (preventing more air from entering)."
+  },
+  {
+    section: 'B',
+    q: "What is the purpose of the secondary assessment?",
+    opts: ["To identify and address life-threatening conditions","To perform a detailed head-to-toe examination after life threats are controlled","To determine scene safety","To establish a diagnosis"],
+    ans: 1,
+    exp: "The secondary assessment is a systematic head-to-toe exam done AFTER the primary assessment. It finds non-life-threatening injuries and gathers a SAMPLE history."
+  },
+  {
+    section: 'B',
+    q: "A patient has a blood glucose level (BGL) of 2.0 mmol/L. This indicates:",
+    opts: ["Normal blood glucose","Hyperglycemia","Hypoglycemia","Diabetic ketoacidosis"],
+    ans: 2,
+    exp: "Normal BGL is approximately 4-8 mmol/L. A level of 2.0 is critically low (hypoglycemia). If the patient is conscious, give sugar. If unconscious, do NOT give anything by mouth."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is correct about epiglottitis versus croup?",
+    opts: ["Both are caused by viral infections","Croup causes drooling; epiglottitis does not","Epiglottitis is bacterial and can cause life-threatening airway obstruction; croup is viral","Cool moist air helps both conditions"],
+    ans: 2,
+    exp: "Croup = viral, barking cough, cool air helps, less dangerous. Epiglottitis = bacterial, drooling, tripod position, life-threatening, rapid transport required."
+  },
+  {
+    section: 'B',
+    q: "What does palliative care focus on?",
+    opts: ["Curing the underlying disease","Prolonging life as long as possible","Improving quality of life and managing symptoms/comfort","Transferring the patient to hospital"],
+    ans: 2,
+    exp: "Palliative care is for patients with terminal illness. The goal is NOT to cure or prolong life, but to maximize comfort, dignity, and quality of life."
+  },
+  {
+    section: 'B',
+    q: "You suspect a child has been abused. You are legally required to:",
+    opts: ["Confirm the abuse before reporting","Ask the caregiver if they want you to report it","Report the suspected abuse to child protection services","Wait until a police officer arrives to confirm"],
+    ans: 2,
+    exp: "Mandatory reporting of suspected child abuse is a LEGAL OBLIGATION in all Canadian provinces. You do not need to confirm — suspicion alone requires reporting."
+  },
+  {
+    section: 'B',
+    q: "When approaching a CBRNE scene, you should position yourself:",
+    opts: ["Downhill and downwind","Uphill and upwind","Downhill and upwind","Uphill and downwind"],
+    ans: 1,
+    exp: "Uphill prevents liquid chemical runoff from reaching you. Upwind prevents inhalation of vapours or gases. Both directions together give maximum protection."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is correct regarding the Six Rights of Medication?",
+    opts: ["Right person, right medication, right dosage, right time, right route, right documentation","Right person, right medication, right strength, right time, right route, right notes","Right patient, right drug, right dose, right time, right method, right outcome","Right person, right medication, right dose, right date, right route, right documentation"],
+    ans: 0,
+    exp: "The exact Six Rights: Person · Medication · Dosage · Time · Route · Documentation. Note 'Time' not 'date', and 'Dosage' not 'strength'."
+  },
+  {
+    section: 'B',
+    q: "What is the primary purpose of triage?",
+    opts: ["To provide treatment to the most critical patients first","To sort patients by severity so the most patients survive with available resources","To identify the cause of the incident","To transport patients as quickly as possible"],
+    ans: 1,
+    exp: "Triage is about doing the GREATEST GOOD for the GREATEST NUMBER. It means sometimes bypassing patients who are beyond help to save those who can be saved."
+  },
+  {
+    section: 'B',
+    q: "A patient with no radial pulse but present breathing in the START system should be tagged:",
+    opts: ["Green","Yellow","Red","Black"],
+    ans: 2,
+    exp: "No radial pulse = circulation compromised = Red tag. The START decision tree: breathing present → check radial pulse → absent pulse = Red."
+  },
+  {
+    section: 'B',
+    q: "What is the recovery position used for?",
+    opts: ["Patients in cardiac arrest","Conscious patients with suspected spinal injuries","Unconscious patients who are breathing to maintain an open airway","Patients experiencing a seizure"],
+    ans: 2,
+    exp: "The recovery position (lateral recumbent) keeps an unconscious but breathing patient's airway open and allows fluids to drain, preventing aspiration."
+  },
+  {
+    section: 'B',
+    q: "What does SAMPLE stand for?",
+    opts: ["Signs, Allergies, Medications, Past history, Last intake, Events","Symptoms, Activity, Medications, Pain, Last meal, Environment","Signs, Assessment, Medical history, Problems, Last oral intake, Events","Symptoms, Allergies, Medications, Physical exam, Location, Events"],
+    ans: 0,
+    exp: "SAMPLE is your patient history mnemonic: S-Signs/symptoms, A-Allergies, M-Medications, P-Past medical history, L-Last oral intake, E-Events leading to the incident."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is NOT checked in the START triage process?",
+    opts: ["Respiration","Radial pulse","Blood pressure","Level of responsiveness"],
+    ans: 2,
+    exp: "START checks three things only: (1) Respiration, (2) Radial Pulse/Circulation, (3) Level of Responsiveness. Blood pressure is NOT checked during triage."
+  },
+  {
+    section: 'B',
+    q: "Which of the following is a sign of tension pneumothorax?",
+    opts: ["Trachea shifting toward the injured side","Trachea shifting away from the injured side","Bilaterally equal breath sounds","Bradycardia"],
+    ans: 1,
+    exp: "Tension pneumothorax causes air to build up on one side, eventually pushing the trachea and mediastinum to the OPPOSITE side. This is a life-threatening emergency."
+  },
+  {
+    section: 'B',
+    q: "Two-rescuer CPR for an adult uses which ratio?",
+    opts: ["15:1","15:2","30:1","30:2"],
+    ans: 3,
+    exp: "Two-rescuer adult CPR = 30:2, same as single-rescuer adult. ONLY two-rescuer child CPR changes to 15:2. Remember: children are the exception."
+  },
+  {
+    section: 'B',
+    q: "What is the most important reason to switch compression providers every 2 minutes during CPR?",
+    opts: ["To allow the other responder to rest","To prevent compression fatigue affecting depth and rate","Because the AED needs to analyze every 2 minutes","To check for a pulse every 2 minutes"],
+    ans: 1,
+    exp: "Quality compressions require adequate depth (5-6 cm) and rate (100-120/min). Fatigue causes compressions to become too shallow — switching every 2 minutes maintains quality."
+  },
+  {
+    section: 'B',
+    q: "Which of the following patients should be moved BEFORE receiving care?",
+    opts: ["A patient in cardiac arrest lying on a soft bed","An unconscious patient lying on a flat sidewalk","A patient with a suspected broken arm sitting in a chair","A patient with chest pain lying on a couch"],
+    ans: 0,
+    exp: "Effective CPR requires a hard, flat surface. A soft bed absorbs compression force. Move the patient to the floor BEFORE starting CPR. The other patients do not require moving before care."
+  }
+];
+
+let current = 0;
+let scoreA = 0;
+let scoreB = 0;
+let answered = false;
+
+const letters = ['A','B','C','D'];
+
+function startQuiz() {
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[current];
+  const total = questions.length;
+  const pct = ((current) / total) * 100;
+
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('qNum').textContent = `Q${current + 1} / ${total}`;
+  document.getElementById('sectionLabel').textContent = `Section ${q.section} — ${q.section === 'A' ? 'Past Exam Questions' : 'Practice Questions'}`;
+
+  const aCorrect = questions.slice(0, current).filter((x, i) => x.section === 'A').length;
+  const liveScore = scoreA + scoreB;
+  document.getElementById('scoreLive').innerHTML = `Score: <span>${liveScore}</span>`;
+
+  document.getElementById('qText').textContent = q.q;
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${opt}</span>`;
+    btn.onclick = () => selectAnswer(i, btn);
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('resultBanner').style.display = 'none';
+  document.getElementById('explanation').style.display = 'none';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('qCard').style.animation = 'none';
+  requestAnimationFrame(() => { document.getElementById('qCard').style.animation = ''; });
+}
+
+function selectAnswer(chosen, btn) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[current];
+  const opts = document.querySelectorAll('.opt');
+  opts.forEach(o => o.classList.add('disabled'));
+
+  const banner = document.getElementById('resultBanner');
+  const exp = document.getElementById('explanation');
+
+  if (chosen === q.ans) {
+    btn.classList.add('correct');
+    banner.className = 'result-banner correct-banner';
+    banner.textContent = '✓ Correct!';
+    banner.style.display = 'flex';
+    if (q.section === 'A') scoreA++;
+    else scoreB++;
+  } else {
+    btn.classList.add('wrong');
+    opts[q.ans].classList.add('correct');
+    banner.className = 'result-banner wrong-banner';
+    banner.textContent = `✗ Incorrect — the correct answer is ${letters[q.ans]}`;
+    banner.style.display = 'flex';
+  }
+
+  exp.innerHTML = `<strong>Explanation:</strong> ${q.exp}`;
+  exp.style.display = 'block';
+
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = current < questions.length - 1 ? 'Next Question →' : 'See Results →';
+
+  document.getElementById('scoreLive').innerHTML = `Score: <span>${scoreA + scoreB}</span>`;
+}
+
+function nextQuestion() {
+  current++;
+  if (current >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('quiz').style.display = 'none';
+  const results = document.getElementById('results');
+  results.style.display = 'flex';
+
+  document.getElementById('scoreA').textContent = scoreA;
+  document.getElementById('scoreB').textContent = scoreB;
+  document.getElementById('scoreTotal').textContent = scoreA + scoreB;
+
+  const pctA = Math.round((scoreA / 50) * 100);
+  const pctB = Math.round((scoreB / 30) * 100);
+  const pctT = Math.round(((scoreA + scoreB) / 80) * 100);
+
+  setPill('pillA', pctA);
+  setPill('pillB', pctB);
+  setPill('pillTotal', pctT);
+}
+
+function setPill(id, pct) {
+  const el = document.getElementById(id);
+  el.textContent = `${pct}%`;
+  if (pct >= 80) el.className = 'percent-pill pass';
+  else if (pct >= 60) el.className = 'percent-pill needs-work';
+  else el.className = 'percent-pill fail';
+}
+
+function restart() {
+  current = 0; scoreA = 0; scoreB = 0;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderQuestion();
+}
+</script>
+</body>
+</html>
